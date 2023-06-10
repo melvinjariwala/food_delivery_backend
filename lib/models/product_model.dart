@@ -106,7 +106,7 @@ class Product extends Equatable {
     Product(
       id: '5',
       name: 'Coca Cola',
-      category: 'Drink',
+      category: 'Drinks',
       description: 'A fresh drink',
       price: 1.99,
       imageUrl:
@@ -116,7 +116,7 @@ class Product extends Equatable {
     Product(
       id: '6',
       name: 'Coca Cola',
-      category: 'Drink',
+      category: 'Drinks',
       description: 'A fresh drink',
       price: 1.99,
       imageUrl:
@@ -126,7 +126,7 @@ class Product extends Equatable {
     Product(
       id: '7',
       name: 'Coca Cola',
-      category: 'Drink',
+      category: 'Drinks',
       description: 'A fresh drink',
       price: 1.99,
       imageUrl:
@@ -136,7 +136,7 @@ class Product extends Equatable {
     Product(
       id: '8',
       name: 'Water',
-      category: 'Drink',
+      category: 'Drinks',
       description: 'A fresh drink',
       price: 1.99,
       imageUrl:
@@ -146,8 +146,8 @@ class Product extends Equatable {
     Product(
       id: '9',
       name: 'Caesar Salad',
-      category: 'Salad',
-      description: 'A fresh drink',
+      category: 'Salads',
+      description: 'A fresh salad',
       price: 1.99,
       imageUrl:
           'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
@@ -156,7 +156,7 @@ class Product extends Equatable {
     Product(
       id: '10',
       name: 'CheeseBurger',
-      category: 'Burger',
+      category: 'Burgers',
       description: 'A burger with Cheese',
       price: 9.99,
       imageUrl:
