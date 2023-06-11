@@ -60,13 +60,9 @@ class MenuScreen extends StatelessWidget {
                                 minHeight: 300, maxHeight: 1000),
                             child: Row(
                               children: [
-                                Expanded(
-                                  child: _buildCategories(context),
-                                ),
+                                Expanded(child: _buildCategories(context)),
                                 const SizedBox(width: 10.0),
-                                Expanded(
-                                  child: _buildProducts(context),
-                                )
+                                Expanded(child: _buildProducts(context))
                               ],
                             ),
                           )

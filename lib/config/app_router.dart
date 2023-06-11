@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery_backend/screens/menu.dart';
+import 'package:food_delivery_backend/screens/settings.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -11,6 +12,8 @@ class AppRouter {
         return MenuScreen.route();
       case MenuScreen.routeName:
         return MenuScreen.route();
+      case SettingsScreen.routeName:
+        return SettingsScreen.route();
       default:
         return _errorRoute();
     }
