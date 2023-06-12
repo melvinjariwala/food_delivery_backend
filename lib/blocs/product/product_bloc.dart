@@ -20,6 +20,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<LoadProducts>(loadProducts);
     on<UpdateProducts>(updateProducts);
     on<SortProducts>(sortProducts);
+    on<AddProducts>(addProducts);
 
     _categorySubscription = _categoryBloc.stream.listen((state) {
       if (state is CategoryLoaded && state.selectedCategory != null) {
@@ -59,6 +60,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoaded(products: sortedProducts));
     } catch (e) {
       print("Error in sortProducts : $e");
+    }
+  }
+
+  FutureOr<void> addProducts(
+      AddProducts event, Emitter<ProductState> emit) async {
+    if (state is ProductLoaded) {
+      emit(ProductLoaded(
+          products: List.from((state as ProductLoaded).products)
+            ..add(event.product)));
     }
   }
 }

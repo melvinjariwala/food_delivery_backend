@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery_backend/blocs/settings/settings_bloc.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -24,11 +26,32 @@ class CustomDrawer extends StatelessWidget {
         children: [
           SizedBox(
             height: kToolbarHeight,
-            child: DrawerHeader(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-                child: Text("Restaurant Name",
-                    style: Theme.of(context).textTheme.headline2)),
+            child: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, state) {
+                if (state is SettingsLoading) {
+                  return DrawerHeader(
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).primaryColor),
+                      child: Text("Restaurant Name",
+                          style: Theme.of(context).textTheme.headline2));
+                }
+                if (state is SettingsLoaded) {
+                  return DrawerHeader(
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).primaryColor),
+                      child: Text(
+                          (state.restaurant.name == null)
+                              ? 'Set your restaurant name'
+                              : state.restaurant.name!,
+                          style: Theme.of(context).textTheme.headline2));
+                }
+                return DrawerHeader(
+                    decoration:
+                        BoxDecoration(color: Theme.of(context).primaryColor),
+                    child: Text("Restaurant Name",
+                        style: Theme.of(context).textTheme.headline2));
+              },
+            ),
           ),
           ...screens.entries.map((screen) {
             return ListTile(

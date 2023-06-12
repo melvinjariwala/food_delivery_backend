@@ -39,17 +39,33 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     Text("Restaurant Menu",
                         style: Theme.of(context).textTheme.headline3),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 200,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: Product.products.length,
-                          itemBuilder: (context, index) {
-                            return ProductCard(
-                                product: Product.products[index], index: index);
-                          }),
+                    BlocBuilder<ProductBloc, ProductState>(
+                      builder: (context, state) {
+                        if (state is ProductLoading) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          );
+                        }
+                        if (state is ProductLoaded) {
+                          return SizedBox(
+                            width: double.infinity,
+                            height: 200,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.products.length,
+                                itemBuilder: (context, index) {
+                                  return ProductCard(
+                                      product: state.products[index],
+                                      index: index);
+                                }),
+                          );
+                        }
+                        return const Center(
+                            child: Text("Something went wrong!"));
+                      },
                     ),
                     const SizedBox(height: 20.0),
                     Responsive.isWideDesktop(context) ||
