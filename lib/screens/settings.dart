@@ -53,7 +53,10 @@ class SettingsScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
         ),
-        _buildOpeningHours()
+        _buildOpeningHours(),
+        ElevatedButton(
+            onPressed: () {},
+            child: Text('Save', style: Theme.of(context).textTheme.headline5))
       ]),
     );
   }
@@ -195,6 +198,7 @@ class SettingsScreen extends StatelessWidget {
                     context.read<SettingsBloc>().add(UpdateSettings(
                         restaurant:
                             state.restaurant.copyWith(description: value)));
+                    print('Restaurant : ${state.restaurant}');
                   },
                 ),
               ],
@@ -209,6 +213,7 @@ class SettingsScreen extends StatelessWidget {
   }
 
   BlocBuilder<SettingsBloc, SettingsState> _buildImage() {
+    //"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
         if (state is SettingsLoading) {
@@ -222,10 +227,9 @@ class SettingsScreen extends StatelessWidget {
               ? Container(
                   height: 200,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(
-                              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"),
+                          image: NetworkImage(state.restaurant.imgUrl!),
                           fit: BoxFit.cover)),
                 )
               : const SizedBox();

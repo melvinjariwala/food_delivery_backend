@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
   final String? id;
+  final String? restaurantId;
   final String name;
   final String category;
   final String description;
@@ -10,6 +11,7 @@ class Product extends Equatable {
 
   const Product({
     this.id,
+    this.restaurantId,
     required this.name,
     required this.category,
     required this.description,
@@ -19,6 +21,7 @@ class Product extends Equatable {
 
   Product copyWith({
     String? id,
+    String? restaurantId,
     String? name,
     String? category,
     String? description,
@@ -27,6 +30,7 @@ class Product extends Equatable {
   }) {
     return Product(
       id: id ?? this.id,
+      restaurantId: restaurantId ?? this.restaurantId,
       name: name ?? this.name,
       category: category ?? this.category,
       description: description ?? this.description,
@@ -35,9 +39,22 @@ class Product extends Equatable {
     );
   }
 
+  Map<String, dynamic> toDocument() {
+    return {
+      'id': id,
+      'restaurantId': restaurantId,
+      'name': name,
+      'category': category,
+      'description': description,
+      'imageUrl': imageUrl,
+      'price': price,
+    };
+  }
+
   factory Product.fromSnapshot(Map<String, dynamic> snap) {
     return Product(
-      id: snap['id'],
+      id: snap['id'].toString(),
+      restaurantId: snap['restaurantId'],
       name: snap['name'],
       category: snap['category'],
       description: snap['description'],
@@ -49,6 +66,7 @@ class Product extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        restaurantId,
         name,
         category,
         description,
@@ -59,6 +77,7 @@ class Product extends Equatable {
   static List<Product> products = const [
     Product(
       id: '1',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Margherita',
       category: 'Pizza',
       description: 'Tomatoes, mozzarella, basil',
@@ -68,6 +87,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '2',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: '4 Formaggi',
       category: 'Pizza',
       description: 'Tomatoes, mozzarella, basil',
@@ -77,6 +97,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '3',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Baviera',
       category: 'Pizza',
       description: 'Tomatoes, mozzarella, basil',
@@ -86,6 +107,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '4',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Baviera',
       category: 'Pizza',
       description: 'Tomatoes, mozzarella, basil',
@@ -95,6 +117,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '5',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Coca Cola',
       category: 'Drinks',
       description: 'A fresh drink',
@@ -104,6 +127,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '6',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Coca Cola',
       category: 'Drinks',
       description: 'A fresh drink',
@@ -113,6 +137,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '7',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Coca Cola',
       category: 'Drinks',
       description: 'A fresh drink',
@@ -122,6 +147,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '8',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Water',
       category: 'Drinks',
       description: 'A fresh drink',
@@ -131,6 +157,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '9',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Caesar Salad',
       category: 'Salads',
       description: 'A fresh salad',
@@ -140,6 +167,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '10',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'CheeseBurger',
       category: 'Burgers',
       description: 'A burger with Cheese',
@@ -149,6 +177,7 @@ class Product extends Equatable {
     ),
     Product(
       id: '11',
+      restaurantId: 'RHh1BHaV4nGUCmINPM81',
       name: 'Chocolate Cake',
       category: 'Desserts',
       description: 'A cake with chocolate',

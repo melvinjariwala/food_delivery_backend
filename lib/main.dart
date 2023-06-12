@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_backend/blocs/category/category_bloc.dart';
@@ -5,13 +6,16 @@ import 'package:food_delivery_backend/blocs/product/product_bloc.dart';
 import 'package:food_delivery_backend/blocs/settings/settings_bloc.dart';
 import 'package:food_delivery_backend/config/theme.dart';
 import 'package:food_delivery_backend/config/app_router.dart';
+import 'package:food_delivery_backend/firebase_options.dart';
 import 'package:food_delivery_backend/models/category_model.dart';
 import 'package:food_delivery_backend/models/opening_hours_model.dart';
 import 'package:food_delivery_backend/models/product_model.dart';
 import 'package:food_delivery_backend/models/restaurant_model.dart';
 import 'package:food_delivery_backend/screens/menu.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_backend/blocs/category/category_bloc.dart';
 import 'package:food_delivery_backend/blocs/product/product_bloc.dart';
 import 'package:food_delivery_backend/config/responsive.dart';
-import 'package:food_delivery_backend/models/product_model.dart';
 import 'package:food_delivery_backend/widgets/category_list_tile.dart';
 import 'package:food_delivery_backend/widgets/custom_app_bar.dart';
 import 'package:food_delivery_backend/widgets/custom_drawer.dart';
