@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_backend/blocs/category/category_bloc.dart';
 import 'package:food_delivery_backend/blocs/product/product_bloc.dart';
 import 'package:food_delivery_backend/config/responsive.dart';
+import 'package:food_delivery_backend/widgets/add_product_card.dart';
 import 'package:food_delivery_backend/widgets/category_list_tile.dart';
 import 'package:food_delivery_backend/widgets/custom_app_bar.dart';
 import 'package:food_delivery_backend/widgets/custom_drawer.dart';
@@ -38,6 +39,7 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     Text("Restaurant Menu",
                         style: Theme.of(context).textTheme.headline3),
+                    const SizedBox(height: 20.0),
                     BlocBuilder<ProductBloc, ProductState>(
                       builder: (context, state) {
                         if (state is ProductLoading) {
@@ -54,11 +56,13 @@ class MenuScreen extends StatelessWidget {
                             child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: state.products.length,
+                                itemCount: state.products.length + 1,
                                 itemBuilder: (context, index) {
-                                  return ProductCard(
-                                      product: state.products[index],
-                                      index: index);
+                                  return (index == 0)
+                                      ? const AddProductCard()
+                                      : ProductCard(
+                                          product: state.products[index - 1],
+                                        );
                                 }),
                           );
                         }

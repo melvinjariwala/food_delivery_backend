@@ -7,25 +7,36 @@ import 'package:equatable/equatable.dart';
 import 'package:food_delivery_backend/blocs/category/category_bloc.dart';
 import 'package:food_delivery_backend/models/category_model.dart';
 import 'package:food_delivery_backend/models/product_model.dart';
+import 'package:food_delivery_backend/repositories/restaurant/restaurant_repository.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
+  final RestaurantRepository _restaurantRepository;
   final CategoryBloc _categoryBloc;
+  StreamSubscription? _restaurantSubscription;
   StreamSubscription? _categorySubscription;
-  ProductBloc({required CategoryBloc categoryBloc})
+  ProductBloc(
+      {required CategoryBloc categoryBloc,
+      required RestaurantRepository restaurantRepository})
       : _categoryBloc = categoryBloc,
+        _restaurantRepository = restaurantRepository,
         super(ProductLoading()) {
     on<LoadProducts>(loadProducts);
-    on<UpdateProducts>(updateProducts);
+    on<FilterProducts>(updateProducts);
     on<SortProducts>(sortProducts);
     on<AddProducts>(addProducts);
 
     _categorySubscription = _categoryBloc.stream.listen((state) {
       if (state is CategoryLoaded && state.selectedCategory != null) {
-        add(UpdateProducts(category: state.selectedCategory!));
+        add(FilterProducts(category: state.selectedCategory!));
       }
+    });
+
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
+      add(LoadProducts(products: restaurant.products!));
     });
   }
 
@@ -36,7 +47,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   }
 
   FutureOr<void> updateProducts(
-      UpdateProducts event, Emitter<ProductState> emit) async {
+      FilterProducts event, Emitter<ProductState> emit) async {
     emit(ProductLoading());
     await Future<void>.delayed(const Duration(seconds: 1));
     List<Product> filteredProducts = Product.products
@@ -65,10 +76,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   FutureOr<void> addProducts(
       AddProducts event, Emitter<ProductState> emit) async {
+    List<Product> newProducts = List.from((state as ProductLoaded).products)
+      ..add(event.product);
+
+    _restaurantRepository.editProducts(newProducts);
+
     if (state is ProductLoaded) {
-      emit(ProductLoaded(
-          products: List.from((state as ProductLoaded).products)
-            ..add(event.product)));
+      emit(ProductLoaded(products: newProducts));
     }
+  }
+
+  @override
+  Future<void> close() async {
+    _restaurantSubscription?.cancel();
+    _categorySubscription?.cancel();
+    super.close();
   }
 }

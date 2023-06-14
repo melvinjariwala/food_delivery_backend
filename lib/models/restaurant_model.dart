@@ -73,7 +73,7 @@ class Restaurant extends Equatable {
 
   factory Restaurant.fromSnapshot(DocumentSnapshot snap) {
     return Restaurant(
-        id: snap['id'].toString(),
+        id: snap.id,
         name: snap['name'],
         imgUrl: snap['imgUrl'],
         description: snap['description'],

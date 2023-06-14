@@ -54,9 +54,6 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
         _buildOpeningHours(),
-        ElevatedButton(
-            onPressed: () {},
-            child: Text('Save', style: Theme.of(context).textTheme.headline5))
       ]),
     );
   }
@@ -71,26 +68,28 @@ class SettingsScreen extends StatelessWidget {
             ),
           );
         } else if (state is SettingsLoaded) {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: state.restaurant.openingHours!.length,
-            itemBuilder: (context, index) {
-              var openingHours = state.restaurant.openingHours![index];
-              return OpeningHoursSettings(
-                openingHours: openingHours,
-                onCheckboxChanged: (value) {
-                  context.read<SettingsBloc>().add(UpdateOpeningHours(
-                      openingHours:
-                          openingHours.copyWith(isOpen: !openingHours.isOpen)));
-                },
-                onSliderChanged: (value) {
-                  context.read<SettingsBloc>().add(UpdateOpeningHours(
-                      openingHours: openingHours.copyWith(
-                          openAt: value.start, closeAt: value.end)));
-                },
-              );
-            },
-          );
+          if (state.restaurant.openingHours != null) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.restaurant.openingHours!.length,
+              itemBuilder: (context, index) {
+                var openingHours = state.restaurant.openingHours![index];
+                return OpeningHoursSettings(
+                  openingHours: openingHours,
+                  onCheckboxChanged: (value) {
+                    context.read<SettingsBloc>().add(UpdateOpeningHours(
+                        openingHours: openingHours.copyWith(
+                            isOpen: !openingHours.isOpen)));
+                  },
+                  onSliderChanged: (value) {
+                    context.read<SettingsBloc>().add(UpdateOpeningHours(
+                        openingHours: openingHours.copyWith(
+                            openAt: value.start, closeAt: value.end)));
+                  },
+                );
+              },
+            );
+          }
         }
         return const Center(
           child: Text("Something went wrong"),
@@ -130,6 +129,10 @@ class SettingsScreen extends StatelessWidget {
                     context.read<SettingsBloc>().add(UpdateSettings(
                         restaurant: state.restaurant.copyWith(name: value)));
                   },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(UpdateSettings(
+                        isUpdateComplete: true, restaurant: state.restaurant));
+                  },
                 ),
                 CustomTextFormField(
                   maxLines: 1,
@@ -141,6 +144,10 @@ class SettingsScreen extends StatelessWidget {
                   onChanged: (value) {
                     context.read<SettingsBloc>().add(UpdateSettings(
                         restaurant: state.restaurant.copyWith(imgUrl: value)));
+                  },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(UpdateSettings(
+                        isUpdateComplete: true, restaurant: state.restaurant));
                   },
                 ),
                 CustomTextFormField(
@@ -154,6 +161,10 @@ class SettingsScreen extends StatelessWidget {
                     context.read<SettingsBloc>().add(UpdateSettings(
                         restaurant: state.restaurant
                             .copyWith(tags: value.split(', '))));
+                  },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(UpdateSettings(
+                        isUpdateComplete: true, restaurant: state.restaurant));
                   },
                 ),
               ],
@@ -199,6 +210,13 @@ class SettingsScreen extends StatelessWidget {
                         restaurant:
                             state.restaurant.copyWith(description: value)));
                     print('Restaurant : ${state.restaurant}');
+                  },
+                  onFocusChanged: (hasFocus) {
+                    if (!hasFocus) {
+                      context.read<SettingsBloc>().add(UpdateSettings(
+                          isUpdateComplete: true,
+                          restaurant: state.restaurant));
+                    }
                   },
                 ),
               ],

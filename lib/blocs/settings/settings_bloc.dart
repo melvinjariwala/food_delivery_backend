@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, avoid_print
 
 import 'dart:async';
 
@@ -6,15 +6,26 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_delivery_backend/models/opening_hours_model.dart';
 import 'package:food_delivery_backend/models/restaurant_model.dart';
+import 'package:food_delivery_backend/repositories/restaurant/restaurant_repository.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(SettingsLoading()) {
+  final RestaurantRepository _restaurantRepository;
+  StreamSubscription? _restaurantSubscription;
+  SettingsBloc({required RestaurantRepository restaurantRepository})
+      : _restaurantRepository = restaurantRepository,
+        super(SettingsLoading()) {
     on<LoadSettings>(loadSettings);
     on<UpdateSettings>(updateSettings);
     on<UpdateOpeningHours>(updateOpeningHours);
+
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
+      print(restaurant);
+      add(LoadSettings(restaurant: restaurant));
+    });
   }
 
   FutureOr<void> loadSettings(
@@ -25,6 +36,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   FutureOr<void> updateSettings(
       UpdateSettings event, Emitter<SettingsState> emit) {
+    if (event.isUpdateComplete) {
+      _restaurantRepository.editRestaurntSettings(event.restaurant);
+    }
     emit(SettingsLoaded(event.restaurant));
   }
 
@@ -39,8 +53,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             : openingHours;
       }).toList();
 
+      _restaurantRepository.editRestaurantOpeningHours(openingHoursList);
+
       emit(SettingsLoaded(
           state.restaurant.copyWith(openingHours: openingHoursList)));
     }
+  }
+
+  @override
+  Future<void> close() async {
+    _restaurantSubscription?.cancel();
+    super.close();
   }
 }
