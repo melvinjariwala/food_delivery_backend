@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery_backend/blocs/category/category_bloc.dart';
 import 'package:food_delivery_backend/blocs/product/product_bloc.dart';
-import 'package:food_delivery_backend/models/category_model.dart';
 import 'package:food_delivery_backend/models/product_model.dart';
 import 'package:food_delivery_backend/widgets/custom_drop_down_button.dart';
 import 'package:food_delivery_backend/widgets/custom_text_form_field.dart';
@@ -18,7 +18,7 @@ class AddProductCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.circular(5.0)),
+          borderRadius: BorderRadius.circular(10.0)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -27,7 +27,7 @@ class AddProductCard extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      Product product = const Product(
+                      Product product = Product(
                           name: '',
                           restaurantId: 'RHh1BHaV4nGUCmINPM81',
                           category: '',
@@ -36,10 +36,12 @@ class AddProductCard extends StatelessWidget {
                           price: 0);
                       return Dialog(
                         child: Container(
-                          height: 450,
+                          height: 430,
                           width: 500,
                           padding: const EdgeInsets.all(20.0),
-                          color: Colors.white,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0)),
                           child: Column(
                             children: [
                               Text(
@@ -58,14 +60,23 @@ class AddProductCard extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(width: 20.0),
-                                  CustomDropDownButton(
-                                    items: Category.categories
-                                        .map((category) => category.name)
-                                        .toList(),
-                                    onChanged: (value) {
-                                      product =
-                                          product.copyWith(category: value);
-                                      print('Product : $product');
+                                  BlocBuilder<CategoryBloc, CategoryState>(
+                                    builder: (context, state) {
+                                      if (state is CategoryLoaded) {
+                                        return CustomDropDownButton(
+                                          items: state.categories!
+                                              .map((category) => category.name)
+                                              .toList(),
+                                          onChanged: (value) {
+                                            product = product.copyWith(
+                                                category: value);
+                                            print('Product : $product');
+                                          },
+                                        );
+                                      }
+                                      return const Center(
+                                        child: Text("Something went wrong"),
+                                      );
                                     },
                                   ),
                                 ],

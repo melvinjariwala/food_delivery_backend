@@ -18,8 +18,9 @@ class LoadCategory extends CategoryEvent {
 
 class SelectCategory extends CategoryEvent {
   final Category? category;
+  final List<Product> products;
 
-  const SelectCategory(this.category);
+  const SelectCategory(this.category, this.products);
 
   @override
   List<Object?> get props => [category];

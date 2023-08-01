@@ -17,6 +17,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final CategoryBloc _categoryBloc;
   StreamSubscription? _restaurantSubscription;
   StreamSubscription? _categorySubscription;
+  Category? selectedCategory;
+  List<Product> originalProducts = [];
   ProductBloc(
       {required CategoryBloc categoryBloc,
       required RestaurantRepository restaurantRepository})
@@ -28,15 +30,17 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<SortProducts>(sortProducts);
     on<AddProducts>(addProducts);
 
-    _categorySubscription = _categoryBloc.stream.listen((state) {
-      if (state is CategoryLoaded && state.selectedCategory != null) {
-        add(FilterProducts(category: state.selectedCategory!));
-      }
-    });
-
     _restaurantSubscription =
         _restaurantRepository.getRestaurant().listen((restaurant) {
+      originalProducts = restaurant.products ?? [];
       add(LoadProducts(products: restaurant.products!));
+    });
+
+    _categorySubscription = _categoryBloc.stream.listen((state) {
+      if (state is CategoryLoaded && state.selectedCategory != null) {
+        selectedCategory = state.selectedCategory;
+        add(FilterProducts(category: state.selectedCategory!));
+      }
     });
   }
 
@@ -48,19 +52,26 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   FutureOr<void> updateProducts(
       FilterProducts event, Emitter<ProductState> emit) async {
-    emit(ProductLoading());
-    await Future<void>.delayed(const Duration(seconds: 1));
-    List<Product> filteredProducts = Product.products
-        .where((product) => product.category == event.category.name)
+    final state = this.state as ProductLoaded;
+    //List<Product> prods = state.products;
+    //emit(ProductLoading());
+    //await Future<void>.delayed(const Duration(seconds: 1));
+
+    print("Filtering : ${selectedCategory!.name}");
+    List<Product> filteredProducts = originalProducts
+        .where((product) => product.category == selectedCategory!.name)
         .toList();
+    print("Filtered Products : $filteredProducts");
+    print("State Products : ${state.products}");
+    await Future<void>.delayed(const Duration(seconds: 1));
     emit(ProductLoaded(products: filteredProducts));
   }
 
   FutureOr<void> sortProducts(
       SortProducts event, Emitter<ProductState> emit) async {
     final state = this.state as ProductLoaded;
-    emit(ProductLoading());
-    await Future<void>.delayed(const Duration(seconds: 1));
+    //emit(ProductLoading());
+    //await Future<void>.delayed(const Duration(seconds: 1));
     int newIndex =
         (event.newIndex > event.oldIndex) ? event.newIndex - 1 : event.newIndex;
     try {
@@ -84,6 +95,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     if (state is ProductLoaded) {
       emit(ProductLoaded(products: newProducts));
     }
+  }
+
+  void updateSelectedCategory(Category? category) {
+    selectedCategory = category;
+    add(FilterProducts(category: selectedCategory!));
   }
 
   @override

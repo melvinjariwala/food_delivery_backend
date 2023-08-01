@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class Product extends Equatable {
-  final String? id;
+  final String id;
   final String? restaurantId;
   final String name;
   final String category;
@@ -9,15 +10,15 @@ class Product extends Equatable {
   final String imageUrl;
   final double price;
 
-  const Product({
-    this.id,
+  Product({
+    String? id,
     this.restaurantId,
     required this.name,
     required this.category,
     required this.description,
     required this.imageUrl,
     required this.price,
-  });
+  }) : id = id ?? const Uuid().v4();
 
   Product copyWith({
     String? id,
@@ -74,7 +75,7 @@ class Product extends Equatable {
         imageUrl,
       ];
 
-  static List<Product> products = const [
+  static List<Product> products = [
     Product(
       id: '1',
       restaurantId: 'RHh1BHaV4nGUCmINPM81',

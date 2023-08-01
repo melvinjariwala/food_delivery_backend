@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
           providers: [
             BlocProvider(
-                create: (context) => CategoryBloc()
+                create: (context) => CategoryBloc(
+                    restaurantRepository: context.read<RestaurantRepository>())
                   ..add(LoadCategory(categories: Category.categories))),
             BlocProvider(
                 create: (context) => ProductBloc(

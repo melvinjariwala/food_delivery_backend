@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery_backend/models/product_model.dart';
@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.circular(5.0)),
+          borderRadius: BorderRadius.circular(10.0)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

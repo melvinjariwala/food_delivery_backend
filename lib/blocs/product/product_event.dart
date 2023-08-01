@@ -27,6 +27,7 @@ class LoadProducts extends ProductEvent {
 
 class FilterProducts extends ProductEvent {
   final Category category;
+  //final List<Product> products;
 
   const FilterProducts({required this.category});
 
