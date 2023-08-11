@@ -5,12 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:food_delivery_backend/models/category_model.dart';
 import 'package:food_delivery_backend/models/opening_hours_model.dart';
 import 'package:food_delivery_backend/models/product_model.dart';
+import 'package:food_delivery_backend/models/user_model.dart';
 
 class Restaurant extends Equatable {
   final String? id;
   final String? name;
   final String? imgUrl;
   final String? description;
+  final User? user;
   final List<String>? tags;
   final List<Category>? categories;
   final List<Product>? products;
@@ -21,20 +23,33 @@ class Restaurant extends Equatable {
       this.name,
       this.imgUrl,
       this.description,
+      this.user,
       this.tags,
       this.categories,
       this.products,
       this.openingHours});
 
+  static const empty = Restaurant();
+
   @override
-  List<Object?> get props =>
-      [id, name, imgUrl, description, tags, categories, products, openingHours];
+  List<Object?> get props => [
+        id,
+        name,
+        imgUrl,
+        description,
+        user,
+        tags,
+        categories,
+        products,
+        openingHours
+      ];
 
   Restaurant copyWith({
     String? id,
     String? name,
     String? imgUrl,
     String? description,
+    User? user,
     List<String>? tags,
     List<Category>? categories,
     List<Product>? products,
@@ -45,6 +60,7 @@ class Restaurant extends Equatable {
       name: name ?? this.name,
       imgUrl: imgUrl ?? this.imgUrl,
       description: description ?? this.description,
+      user: user ?? this.user,
       tags: tags ?? this.tags,
       categories: categories ?? this.categories,
       products: products ?? this.products,
@@ -59,6 +75,7 @@ class Restaurant extends Equatable {
       'imgUrl': imgUrl ?? '',
       'description': description ?? '',
       'tags': tags ?? [],
+      'user': user?.toDocument() ?? const User(id: '').toDocument(),
       'categories': categories!.map((category) {
         return category.toDocument();
       }).toList(),
@@ -77,6 +94,7 @@ class Restaurant extends Equatable {
         name: snap['name'],
         imgUrl: snap['imgUrl'],
         description: snap['description'],
+        user: User(id: snap['user']['id'], email: snap['user']['email']),
         tags: (snap['tags'] as List).map((tag) {
           return tag as String;
         }).toList(),

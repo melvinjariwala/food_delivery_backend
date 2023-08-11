@@ -21,10 +21,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<SelectCategory>(selectCategory);
     on<SortCategories>(sortCategories);
 
-    _restaurantSubscription =
-        _restaurantRepository.getRestaurant().listen((restaurant) {
-      add(LoadCategory(categories: restaurant.categories!));
-    });
+    // _restaurantSubscription =
+    //     _restaurantRepository.getRestaurant().listen((restaurant) {
+    //   add(LoadCategory(categories: restaurant.categories!));
+    // });
   }
 
   FutureOr<void> loadCategory(

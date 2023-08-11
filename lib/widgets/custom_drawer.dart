@@ -2,7 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery_backend/blocs/authentication/authentication_bloc.dart';
 import 'package:food_delivery_backend/blocs/settings/settings_bloc.dart';
+import 'package:food_delivery_backend/cubits/login/login_cubit.dart';
+import 'package:food_delivery_backend/screens/login_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -56,13 +59,27 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ...screens.entries.map((screen) {
-            return ListTile(
-              leading: screen.value['icon'],
-              title: Text(screen.key),
-              onTap: () {
-                Navigator.pushNamed(context, screen.value['routeName']);
-              },
-            );
+            if (screen.key == 'Logout') {
+              return ListTile(
+                leading: screen.value['icon'],
+                title: Text(screen.key),
+                onTap: () {
+                  context
+                      .read<AuthenticationBloc>()
+                      .add(AuthenticcationLogoutRequest());
+                  print("route : ${LoginScreen.route()}");
+                  Navigator.pushNamed(context, LoginScreen.routeName);
+                },
+              );
+            } else {
+              return ListTile(
+                leading: screen.value['icon'],
+                title: Text(screen.key),
+                onTap: () {
+                  Navigator.pushNamed(context, screen.value['routeName']);
+                },
+              );
+            }
           })
         ],
       ),

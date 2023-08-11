@@ -41,7 +41,7 @@ class CustomLayout extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(
                       top: 20.0, bottom: 20.0, right: 20.0),
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).backgroundColor,
                   child: const Center(child: Text("Advertisements")),
                 ),
               )
